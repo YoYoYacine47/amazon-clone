@@ -1,0 +1,9 @@
+@tailwind components;
+@layer components {
+  .link {
+    @apply font-semibold hover:underline cursor-pointer;
+  }
+  .button {
+    @apply border-yellow-400 text-lg font-normal bg-gradient-to-b  from-yellow-200 to-yellow-400 border p-3 rounded-sm active:from-yellow-500 focus:outline-none;
+  }
+}
