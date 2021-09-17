@@ -4,13 +4,22 @@ import {
   SearchIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/outline";
+import { signIn, signOut, useSession } from "next-auth/client";
+import { useRouter } from "next/dist/client/router";
+import { useSelector } from "react-redux";
+import { selectBasket } from "../slices/basketSlice";
 
 function Header() {
+  const [session] = useSession();
+  const router = useRouter();
+  const items = useSelector(selectBasket);
+
   return (
-    <header>
-      <div className="flex bg-amazon_blue items-center py-2 pr-2">
+    <header className="sticky top-0 z-50">
+      <div className=" flex bg-amazon_blue items-center py-2 pr-2">
         <div className="mt-2  space-x-3 flex items-center flex-grow sm:flex-grow-0">
           <Image
+            onClick={() => router.push("/")}
             src="https://links.papareact.com/f90"
             width={150}
             height={40}
@@ -27,26 +36,34 @@ function Header() {
         </div>
 
         <div className="p-2 text-white">
-          <p className="text-xs">hello yoyo yacine</p>
-          <p className=" font-bold whitespace-nowrap cursor-pointer hover:underline">
+          <p className="text-sm">
+            {session ? `hello, ${session.user.name}` : `sign in`}
+          </p>
+          <p
+            onClick={session ? signOut : signIn}
+            className=" font-bold whitespace-nowrap cursor-pointer hover:underline"
+          >
             Account & Lists
           </p>
         </div>
 
         <div className="p-2 text-white cursor-pointer hover:underline">
-          <p className="text-xs">Returns</p>
+          <p className="text-sm">Returns</p>
           <p className="font-bold whitespace-nowrap">& Orders</p>
         </div>
 
-        <div className="relative p-2 flex items-center text-white cursor-pointer">
+        <div
+          onClick={() => router.push("/checkout")}
+          className="relative p-2 flex items-center text-white cursor-pointer"
+        >
           <ShoppingCartIcon className="h-10" />
           <span className="bg-yellow-500 text-base font-semibold h-5 w-5 flex justify-center items-center rounded-full top-1 right-1 absolute">
-            2
+            {items.length}
           </span>
         </div>
       </div>
 
-      <div className="text-white flex pl-4 space-x-3 bg-gray-700 p-1">
+      <div className=" text-white flex pl-4 space-x-3 bg-gray-700 p-1">
         <p className="flex items-center link">
           <MenuIcon className="h-6" />
           All

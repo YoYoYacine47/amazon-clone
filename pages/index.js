@@ -12,7 +12,7 @@ export default function Home({ products }) {
       </Head>
       <Header />
 
-      <main className="max-w-[90rem] mx-auto">
+      <main className=" max-w-[90rem] mx-auto">
         <Banner />
         <ProductFeed products={products} />
       </main>
