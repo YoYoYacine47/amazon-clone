@@ -6,10 +6,33 @@ import { useSelector } from "react-redux";
 import { selectBasket, selectTotal } from "../slices/basketSlice";
 import FlipMove from "react-flip-move";
 import Currency from "react-currency-formatter";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
+import { useSession } from "next-auth/client";
+
+const stripePromise = loadStripe(process.env.stripe_public_key);
 
 function Checkout() {
   const items = useSelector(selectBasket);
   const total = useSelector(selectTotal);
+  const [session] = useSession();
+
+  const createCheckoutSession = async () => {
+    const stripe = await stripePromise;
+
+    // call
+    const checkoutSession = await axios.post("/api/create-checkout-session", {
+      items,
+      email: session.user.email,
+    });
+
+    //redirect
+    const result = await stripe.redirectToCheckout({
+      sessionId: checkoutSession.data.id,
+    });
+
+    if (result.error) alert(result.error.message);
+  };
 
   return (
     <Fragment>
@@ -38,7 +61,14 @@ function Checkout() {
                 <Currency quantity={total} />
               </div>
             </div>
-            <button className="button">CheckOut</button>
+            <button
+              disabled={!session}
+              className={`button ${!session && "bg-gray-500"}`}
+              role="link"
+              onClick={createCheckoutSession}
+            >
+              CheckOut
+            </button>
           </div>
 
           <div className="">
