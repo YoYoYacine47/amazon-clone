@@ -10,7 +10,9 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import { useSession } from "next-auth/client";
 
-const stripePromise = loadStripe(process.env.stripe_public_key);
+const stripePromise = loadStripe(
+  "pk_test_51JbWDGG9iIst373fxXbhyFBVqkL67fk2tLbP2mPyO0cQI9N6rpS5VB4ay9ifUTaAUcjIjSpHO36bYdlQO6GgnK3500v3EmWglp"
+);
 
 function Checkout() {
   const items = useSelector(selectBasket);
