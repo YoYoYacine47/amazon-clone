@@ -47,7 +47,10 @@ function Header() {
           </p>
         </div>
 
-        <div className="p-2 text-white cursor-pointer hover:underline">
+        <div
+          className="p-2 text-white cursor-pointer hover:underline"
+          onClick={() => router.push("/orders")}
+        >
           <p className="text-sm">Returns</p>
           <p className="font-bold whitespace-nowrap">& Orders</p>
         </div>
